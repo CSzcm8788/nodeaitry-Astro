@@ -5,6 +5,8 @@ import {
   svgoOptimizer,
 } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
+import { writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { unified } from "@astrojs/markdown-remark";
@@ -27,6 +29,27 @@ export default defineConfig({
       filter: page =>
         config.features?.showArchives !== false || !page.endsWith("/archives/"),
     }),
+    {
+      // Emit Cloudflare Pages _redirects into the build output.
+      // (Kept out of public/ because Vite tries to parse public/_redirects.)
+      name: "cloudflare-redirects",
+      hooks: {
+        "astro:build:done": ({ dir }: { dir: URL }) => {
+          const out = fileURLToPath(new URL("_redirects", dir));
+          writeFileSync(
+            out,
+            [
+              "/flights   /          301",
+              "/flights/  /          301",
+              "/soul      /          301",
+              "/soul/     /          301",
+              "/index.xml /rss.xml   301",
+              "",
+            ].join("\n")
+          );
+        },
+      },
+    },
   ],
   i18n: {
     locales: ["zh"],
