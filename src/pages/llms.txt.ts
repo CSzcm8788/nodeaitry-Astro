@@ -4,23 +4,27 @@ import { getSortedPosts } from "@/utils/getSortedPosts";
 import { getPostUrl } from "@/utils/getPostPaths";
 import config from "@/config";
 
-// 复刻 Hugo 的 /llms.txt：站点页面索引（llmstxt.org 规范，纯静态，非实时 AI）
+// 站点级 llms.txt 索引（llmstxt.org 规范，纯静态）。
+// 每篇文章链接指向其纯文本版 /posts/<slug>/llms.txt。
 export const GET: APIRoute = async () => {
   const base = config.site.url.replace(/\/+$/, "");
   const posts = getSortedPosts(await getCollection("posts")).filter(
     p => !p.data.draft
   );
 
+  const postUrl = (post: (typeof posts)[number]) =>
+    base +
+    ("/" + getPostUrl(post.id, post.filePath, config.site.lang).replace(/^\/+|\/+$/g, "") + "/").replace(/\/{2,}/g, "/");
+
   const lines: string[] = [];
   lines.push(`# ${config.site.title}`);
+  lines.push(`\n> ${config.site.description}`);
+  lines.push("");
   lines.push(`- [关于](${base}/about/)`);
   lines.push("");
   lines.push("## 文章");
   for (const post of posts) {
-    const url =
-      base +
-      ("/" + getPostUrl(post.id, post.filePath, config.site.lang).replace(/^\/+|\/+$/g, "") + "/").replace(/\/{2,}/g, "/");
-    lines.push(`- [${post.data.title}](${url})`);
+    lines.push(`- [${post.data.title}](${postUrl(post)}llms.txt): ${post.data.description}`);
   }
 
   return new Response(lines.join("\n") + "\n", {

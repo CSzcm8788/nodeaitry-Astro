@@ -38,14 +38,7 @@ export default defineConfig({
           const out = fileURLToPath(new URL("_redirects", dir));
           writeFileSync(
             out,
-            [
-              "/flights   /          301",
-              "/flights/  /          301",
-              "/soul      /          301",
-              "/soul/     /          301",
-              "/index.xml /rss.xml   301",
-              "",
-            ].join("\n")
+            ["/index.xml /rss.xml 301", ""].join("\n")
           );
         },
       },
