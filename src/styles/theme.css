@@ -7,10 +7,7 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
-  /* Body / UI / 标题：Inter + 中文回退链（Inter 不含中文字形） */
-  --font-app: "Inter", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  /* 代码块保留等宽字体 */
-  --font-mono: var(--font-google-sans-code), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-app: var(--font-google-sans-code);
 }
 
 /* Light theme values */
