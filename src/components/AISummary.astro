@@ -1,0 +1,37 @@
+---
+/** AI Summary box — ported from the Hugo `ai_summary.html` partial. */
+interface Props {
+  summary?: string;
+  by?: string;
+}
+const { summary, by = "AI" } = Astro.props;
+---
+
+{
+  summary && (
+    <section class="ai-summary" aria-label="AI Summary">
+      <div class="ai-summary-head">
+        <div class="ai-summary-title">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" width="20" height="20">
+            <path d="M7 8.5h10a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-2a4 4 0 0 1 4-4Z" stroke="currentColor" stroke-width="2" />
+            <path d="M12 8.5V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M9 5h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <circle cx="9" cy="13.5" r="1" fill="currentColor" />
+            <circle cx="15" cy="13.5" r="1" fill="currentColor" />
+          </svg>
+          <span>AI 摘要</span>
+        </div>
+        <span class="ai-summary-by">由 {by} 生成</span>
+      </div>
+      <div class="ai-summary-body" set:text={summary} />
+    </section>
+  )
+}
+
+<style>
+  .ai-summary{margin:1.5rem 0;padding:1rem 1.1rem;border:1px solid var(--border);border-radius:10px;background:var(--muted)}
+  .ai-summary-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.55rem}
+  .ai-summary-title{display:flex;align-items:center;gap:.4rem;color:var(--accent);font-weight:600;font-size:.95rem}
+  .ai-summary-by{color:var(--muted-foreground);font-size:.75rem}
+  .ai-summary-body{color:var(--foreground);line-height:1.7;font-size:.92rem}
+</style>

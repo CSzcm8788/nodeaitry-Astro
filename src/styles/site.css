@@ -1,0 +1,58 @@
+/* ===== 站点自定义排版：Inter 字体方案（从用户规范适配到 AstroPaper 结构） ===== */
+@layer base {
+  body {
+    font-family: var(--font-app);
+    font-weight: 400;
+    font-feature-settings: "tnum";
+    line-height: 1.7;
+  }
+
+  /* 代码块保留等宽字体（避免被 Inter 接管） */
+  code,
+  kbd,
+  samp,
+  pre,
+  .astro-code,
+  .astro-code code {
+    font-family: var(--font-mono);
+    font-feature-settings: normal;
+  }
+
+  /* 标题层级 */
+  h1,
+  h2,
+  h3,
+  h4,
+  .site-title {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  h1 {
+    font-weight: 700;
+  }
+
+  /* Logo / 站点标题 / Hero 标题：斜体（注意中文为合成斜体） */
+  .site-title,
+  .hero-title {
+    font-weight: 600;
+    font-style: italic;
+  }
+
+  /* 强调内容 */
+  em,
+  blockquote,
+  .app-prose em {
+    font-style: italic;
+    font-weight: 400;
+  }
+}
+
+/* 文章卡片悬浮效果 */
+.article-card {
+  transition: all 0.2s ease;
+  border-radius: 0.5rem;
+}
+.article-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+}
