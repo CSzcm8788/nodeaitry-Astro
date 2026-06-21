@@ -9,8 +9,6 @@ aiSummary: "这是 NODEAI TRY 的初始化记录：站点使用 Hugo、PaperMod 
 aiSummaryBy: "nodeaitry"
 ---
 
-## Table of contents
-
 这是 NODEAI TRY 的第一篇文章。
 
 ## 写作方式

@@ -31,6 +31,7 @@ const api = import.meta.env.DEV
   data-page-size={pageSize}
 >
   <h2 class="ct-title">评论 <span id="ct-count">0</span></h2>
+  <p class="ct-subtitle">读完了？留个言吧。</p>
   <form id="ct-form" class="ct-form">
     <div class="ct-reply-line">
       <span id="ct-reply-hint" class="ct-reply-hint" hidden></span>
@@ -68,6 +69,7 @@ const api = import.meta.env.DEV
   .ct-wrap{margin:3rem 0 0;padding-top:1.25rem;border-top:1px solid var(--border)}
   .ct-title{margin:0 0 1rem;font-size:1.35rem}
   .ct-title span{color:var(--muted-foreground);font-size:.95rem;font-weight:500}
+  .ct-subtitle{margin:0 0 1.1rem;color:var(--muted-foreground);font-size:.9rem}
   .ct-form{padding:1rem;border:1px solid var(--border);border-radius:8px;background:var(--background)}
   .ct-form-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
   .ct-form label{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.75rem;color:var(--muted-foreground);font-size:.82rem}

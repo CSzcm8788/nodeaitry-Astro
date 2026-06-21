@@ -16,6 +16,7 @@ import BackToTopButton from "./_components/BackToTopButton.astro";
 import AdjacentPostNav from "./_components/AdjacentPostNav.astro";
 import AISummary from "@/components/AISummary.astro";
 import Comments from "@/components/Comments.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
 import config from "@/config";
 
 export async function getStaticPaths() {
@@ -113,6 +114,8 @@ const ogImage = ogImageUrl
   modDatetime={modDatetime}
 >
   <Header />
+
+  <TableOfContents />
 
   <BackButton />
 

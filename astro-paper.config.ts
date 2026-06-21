@@ -28,10 +28,10 @@ export default defineAstroPaperConfig({
     search: "pagefind",
   },
   socials: [
-    { name: "github",    url: "https://github.com/CSzcm8788" },
-    { name: "instagram", url: "https://www.instagram.com/yukabiubiu/" },
-    { name: "x",         url: "https://x.com/yukabiubiu" },
-    { name: "telegram",  url: "https://t.me/yukabiubiu" },
+    { name: "github",   url: "https://github.com/CSzcm8788" },
+    { name: "x",        url: "https://x.com/yukabiubiu" },
+    { name: "telegram", url: "https://t.me/yukabiubiu" },
+    { name: "mail",     url: "mailto:muziwen.logo@gmail.com" },
   ],
   shareLinks: [
     { name: "x",        url: "https://x.com/intent/post?url=" },
