@@ -37,23 +37,11 @@ const api = import.meta.env.DEV
       <button id="ct-reply-cancel" class="ct-link-button" type="button" hidden>取消</button>
     </div>
     <div class="ct-form-row">
-      <label>
-        <span>昵称</span>
-        <input id="ct-name" name="name" autocomplete="name" maxlength="80" required />
-      </label>
-      <label>
-        <span>邮箱（用于头像）</span>
-        <input id="ct-email" name="email" autocomplete="email" maxlength="120" type="email" />
-      </label>
-      <label>
-        <span>网站</span>
-        <input id="ct-link" name="link" autocomplete="url" maxlength="240" type="url" />
-      </label>
+      <input id="ct-name" name="name" autocomplete="name" maxlength="80" placeholder="昵称" required />
+      <input id="ct-email" name="email" autocomplete="email" maxlength="120" type="email" placeholder="邮箱（用于头像）" />
+      <input id="ct-link" name="link" autocomplete="url" maxlength="240" type="url" placeholder="网站（可选）" />
     </div>
-    <label>
-      <span>评论</span>
-      <textarea id="ct-content" name="content" maxlength="4000" rows="5" required></textarea>
-    </label>
+    <textarea id="ct-content" name="content" maxlength="4000" rows="4" placeholder="写下你的评论…" required></textarea>
     <div class="ct-form-actions">
       <p id="ct-message" class="ct-message"></p>
       <button id="ct-submit" class="ct-button" type="submit">提交</button>
@@ -69,14 +57,14 @@ const api = import.meta.env.DEV
   #ct-comments .ct-title{margin:0 0 .25rem;font-size:1.35rem}
   #ct-comments .ct-title span{color:var(--muted-foreground);font-size:.95rem;font-weight:500}
   #ct-comments .ct-subtitle{margin:0 0 1.25rem;color:var(--muted-foreground);font-size:.9rem}
-  #ct-comments .ct-form{padding:1rem;border:1px solid var(--border);border-radius:10px;background:var(--background)}
-  #ct-comments .ct-form-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
-  #ct-comments .ct-form label{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.75rem;color:var(--muted-foreground);font-size:.82rem}
-  #ct-comments .ct-form input,#ct-comments .ct-form textarea{width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:8px;background:var(--background);color:var(--foreground);padding:.65rem .75rem;font:inherit}
-  #ct-comments .ct-form input:focus,#ct-comments .ct-form textarea:focus{outline:none;border-color:var(--accent)}
-  #ct-comments .ct-form textarea{resize:vertical;line-height:1.55}
+  #ct-comments .ct-form{margin-bottom:.5rem}
+  #ct-comments .ct-form-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin-bottom:.6rem}
+  #ct-comments .ct-form input,#ct-comments .ct-form textarea{width:100%;box-sizing:border-box;border:1px solid transparent;border-radius:8px;background:var(--muted);color:var(--foreground);padding:.6rem .8rem;font:inherit}
+  #ct-comments .ct-form input::placeholder,#ct-comments .ct-form textarea::placeholder{color:var(--muted-foreground)}
+  #ct-comments .ct-form input:focus,#ct-comments .ct-form textarea:focus{outline:none;border-color:var(--accent);background:var(--background)}
+  #ct-comments .ct-form textarea{resize:vertical;line-height:1.6;min-height:5.5rem}
   #ct-comments .ct-form-actions{display:flex;align-items:center;gap:.75rem}
-  #ct-comments .ct-button{border:0;border-radius:8px;background:var(--accent);color:var(--accent-foreground);cursor:pointer;font-weight:600;padding:.6rem 1.1rem}
+  #ct-comments .ct-button{border:0;border-radius:999px;background:var(--accent);color:var(--accent-foreground);cursor:pointer;font-weight:600;padding:.5rem 1.4rem}
   #ct-comments .ct-button:disabled{cursor:not-allowed;opacity:.55}
   #ct-comments .ct-link-button{border:0;background:transparent;color:var(--muted-foreground);cursor:pointer;padding:0}
   #ct-comments .ct-reply-line{display:flex;align-items:center;gap:.5rem;min-height:1.4rem;margin-bottom:.35rem}
