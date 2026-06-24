@@ -32,3 +32,8 @@ public/pagefind
 # docker compose
 compose.override.yaml
 .DS_Store
+
+# comment worker
+worker/node_modules/
+worker/.wrangler/
+worker/.dev.vars
