@@ -6,7 +6,7 @@ tags: ["nodeaitry", "hugo", "papermod"]
 categories: ["site"]
 draft: false
 aiSummary: "这是 NODEAI TRY 的初始化记录：站点使用 Hugo、PaperMod 和 Cloudflare Pages 构建，并接入评论、代码高亮、目录、分享与深色模式等基础能力。"
-aiSummaryBy: "nodeaitry"
+aiSummaryBy: "Claude"
 ---
 
 这是 NODEAI TRY 的第一篇文章。

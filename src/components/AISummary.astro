@@ -1,15 +1,20 @@
 ---
-/** AI Summary box — ported from the Hugo `ai_summary.html` partial. */
+/**
+ * AI 摘要框（参照 missuo.me）：滚入视野后正文逐字"打字机"显示，
+ * 打字时右上角显示"生成中…"，完成后显示"由 <by> 生成"。
+ * 为了 SEO / 无障碍：完整摘要文本先正常渲染在 HTML 里（爬虫/读屏可读），
+ * 仅在支持动画且非 reduced-motion 时由脚本清空再逐字揭示。
+ */
 interface Props {
   summary?: string;
   by?: string;
 }
-const { summary, by = "AI" } = Astro.props;
+const { summary, by = "Claude" } = Astro.props;
 ---
 
 {
   summary && (
-    <section class="ai-summary" aria-label="AI Summary">
+    <section class="ai-summary" aria-label="AI 摘要" data-by={by}>
       <div class="ai-summary-head">
         <div class="ai-summary-title">
           <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" width="20" height="20">
@@ -23,7 +28,9 @@ const { summary, by = "AI" } = Astro.props;
         </div>
         <span class="ai-summary-by">由 {by} 生成</span>
       </div>
-      <div class="ai-summary-body" set:text={summary} />
+      <div class="ai-summary-body">
+        <span class="ai-summary-text" set:text={summary} /><span class="ai-summary-caret" aria-hidden="true" />
+      </div>
     </section>
   )
 }
@@ -32,6 +39,84 @@ const { summary, by = "AI" } = Astro.props;
   .ai-summary{margin:1.5rem 0;padding:1rem 1.1rem;border:1px solid var(--border);border-radius:10px;background:var(--muted)}
   .ai-summary-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.55rem}
   .ai-summary-title{display:flex;align-items:center;gap:.4rem;color:var(--accent);font-weight:600;font-size:.95rem}
-  .ai-summary-by{color:var(--muted-foreground);font-size:.75rem}
+  .ai-summary-by{color:var(--muted-foreground);font-size:.75rem;white-space:nowrap}
+  .ai-summary-by.generating{color:var(--accent);animation:ai-pulse 1.1s ease-in-out infinite}
   .ai-summary-body{color:var(--foreground);line-height:1.7;font-size:.92rem}
+  .ai-summary-caret{display:inline-block;width:2px;height:1.05em;margin-left:1px;vertical-align:text-bottom;background:var(--accent);opacity:0}
+  .ai-summary.is-typing .ai-summary-caret{opacity:1;animation:ai-blink 1s step-end infinite}
+  @keyframes ai-blink{50%{opacity:0}}
+  @keyframes ai-pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  @media (prefers-reduced-motion: reduce){
+    .ai-summary-caret{display:none}
+    .ai-summary-by.generating{animation:none}
+  }
 </style>
+
+<script>
+  function initAiSummary() {
+    const sections = document.querySelectorAll<HTMLElement>(".ai-summary");
+    sections.forEach(sec => {
+      if ((sec as any).__aiInit) return;
+      (sec as any).__aiInit = true;
+
+      const textEl = sec.querySelector<HTMLElement>(".ai-summary-text");
+      const byEl = sec.querySelector<HTMLElement>(".ai-summary-by");
+      const body = sec.querySelector<HTMLElement>(".ai-summary-body");
+      const caret = sec.querySelector<HTMLElement>(".ai-summary-caret");
+      if (!textEl || !byEl || !body) return;
+
+      const full = textEl.textContent || "";
+      const by = sec.dataset.by || "AI";
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // 不支持动画 / 偏好减少动效：保持完整文本与正常署名
+      if (reduce || !("IntersectionObserver" in window) || full.length === 0) {
+        caret?.remove();
+        return;
+      }
+
+      let started = false;
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting && !started) {
+              started = true;
+              observer.disconnect();
+              typeIt();
+            }
+          });
+        },
+        { threshold: 0.35 }
+      );
+      observer.observe(sec);
+
+      function typeIt() {
+        // 锁定当前高度，避免打字时下方内容跳动
+        body!.style.minHeight = body!.getBoundingClientRect().height + "px";
+        textEl!.textContent = "";
+        sec.classList.add("is-typing");
+        byEl!.textContent = "生成中…";
+        byEl!.classList.add("generating");
+
+        const chars = Array.from(full);
+        let i = 0;
+        const tick = () => {
+          if (i < chars.length) {
+            textEl!.textContent += chars[i++];
+            window.setTimeout(tick, 16 + Math.random() * 26);
+          } else {
+            sec.classList.remove("is-typing");
+            byEl!.classList.remove("generating");
+            byEl!.textContent = "由 " + by + " 生成";
+            caret?.remove();
+            body!.style.minHeight = "";
+          }
+        };
+        tick();
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", initAiSummary);
+  initAiSummary();
+</script>
