@@ -1,5 +1,5 @@
 ---
-title: "Hello Anvenl"
+title: "Hello 👏"
 pubDatetime: 2026-05-28T22:50:00+08:00
 description: "Anvenl的第一篇文章。"
 tags: ["Anvenl", "Astro", "papermod"]
