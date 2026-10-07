@@ -3,7 +3,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 export default defineAstroPaperConfig({
   site: {
     url: "https://anvenl.com/",
-    title: "NODEAI TRY",
+    title: "Anvenl's Notes",
     description: "记录、分享与归档 AI、工程实践与产品思考。",
     author: "nodeaitry",
     profile: "https://anvenl.com/",
