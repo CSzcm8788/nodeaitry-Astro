@@ -16,6 +16,7 @@ PUBLIC_BASE_URL = "https://comments.anvenl.com"
 ALLOWED_ORIGINS = "https://anvenl.com,https://nodeaitry.com,http://127.0.0.1:1313,http://localhost:1313"
 AUTO_APPROVE = "false"
 ADMIN_NAME = "Anvenl"
+ADMIN_AVATAR_URL = "https://anvenl.com/apple-touch-icon.png?v=anvenl"
 ADMIN_EMAILS = "muziwen.logo@gmail.com"
 
 [[d1_databases]]

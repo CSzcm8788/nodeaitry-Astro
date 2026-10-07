@@ -267,7 +267,7 @@ async function handleTelegramMessage(env, message) {
   const adminName = normalizeText(env.ADMIN_NAME, 80) || "Admin";
   const adminEmail = firstAdminEmail(env);
   const emailHash = adminEmail ? md5(adminEmail) : null;
-  const avatarUrl = emailHash ? `https://www.gravatar.com/avatar/${emailHash}?s=160&d=mp&r=g` : "https://www.gravatar.com/avatar/?s=160&d=mp&r=g";
+  const avatarUrl = normalizeOptionalUrl(env.ADMIN_AVATAR_URL) || (emailHash ? `https://www.gravatar.com/avatar/${emailHash}?s=160&d=mp&r=g` : "https://www.gravatar.com/avatar/?s=160&d=mp&r=g");
 
   const inserted = await env.DB.prepare(
     `INSERT INTO comments (
@@ -432,7 +432,7 @@ function publicComment(row, env) {
     content: row.content,
     isAdmin: Boolean(row.is_admin),
     source: row.source,
-    avatarUrl: row.avatar_url,
+    avatarUrl: row.is_admin ? (normalizeOptionalUrl(env.ADMIN_AVATAR_URL) || row.avatar_url) : row.avatar_url,
     ipCountry: row.ip_country,
     ipCountryCode: row.ip_country_code,
     ipAsn: row.ip_asn,
