@@ -1,6 +1,8 @@
 ---
 import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
 import { getRelativeLocaleUrl } from "astro:i18n";
+import avatar from "@/assets/images/anvenl-avatar.jpg";
 import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import Layout from "@/layouts/Layout.astro";
@@ -34,6 +36,16 @@ const homePath = getRelativeLocaleUrl(locale, "");
     class="app-layout"
   >
     <section id="hero" class="border-border border-b pt-8 pb-6">
+      <Image
+        src={avatar}
+        alt="Anvenl 的头像"
+        width={112}
+        height={112}
+        widths={[80, 112, 160, 224]}
+        sizes="(min-width: 640px) 112px, 80px"
+        loading="eager"
+        class="mx-auto mb-2 size-20 rounded-full object-cover sm:float-right sm:mt-6 sm:mb-4 sm:ml-6 sm:size-28"
+      />
       <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
         你好 / Hello 👋
       </h1>
