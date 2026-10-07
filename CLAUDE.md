@@ -39,7 +39,7 @@ Cloudflare Pages（部署）+ Workers + D1（评论）+ R2（图床）+ Telegram
 
 ### 1. 文章放哪
 新文章是一个 Markdown 文件，放在 `src/content/posts/` 下，例如 `src/content/posts/my-first-note.md`。
-**文件名即网址**：`my-first-note.md` → `https://nodeaitry.com/posts/my-first-note/`。
+**文件名即网址**：`my-first-note.md` → `https://anvenl.com/posts/my-first-note/`。
 （迁移自 Hugo 的老文章必须保持原文件名/slug 不变，否则评论会对不上。）
 
 ### 2. Frontmatter 模板（复制即用）
@@ -98,7 +98,7 @@ git push        # 推送后 Cloudflare Pages 自动构建部署，约 1–2 分�
 ### 第 1 步：新建一篇文章
 1. 在 VS Code 左侧找到文件夹 `src` → `content` → `posts`。
 2. 右键 `posts` → New File（新建文件），命名为 `wo-de-diyi-pian.md`（**全小写、用英文/数字/连字符，别用空格和中文**）。
-   - 这个文件名就是网址：`wo-de-diyi-pian.md` → `nodeaitry.com/posts/wo-de-diyi-pian/`。
+   - 这个文件名就是网址：`wo-de-diyi-pian.md` → `anvenl.com/posts/wo-de-diyi-pian/`。
 
 ### 第 2 步：粘贴模板，改成你的内容
 把下面整段复制进去，然后只改引号里的文字：
@@ -139,13 +139,23 @@ git push
 ```
 - `git add .`：把你的改动“登记”起来。
 - `git commit -m "..."`：把这次改动“存档”，引号里随便写说明。
-- `git push`：上传到 GitHub。网站（Cloudflare）会自动开始构建，**约 1–2 分钟后** `nodeaitry.com` 就更新了。
+- `git push`：上传到 GitHub。网站（Cloudflare）会自动开始构建，**约 1–2 分钟后** `anvenl.com` 就更新了。
 - 如果 push 时让你登录：用户名 `CSzcm8788`，密码处粘贴你的 GitHub Token（不是账号密码）。
 
 ### 第 5 步：确认上线
-等 1–2 分钟，刷新 `https://nodeaitry.com/posts/你的文件名/` 就能看到。
+等 1–2 分钟，刷新 `https://anvenl.com/posts/你的文件名/` 就能看到。
 
 ### 常见情况
 - **网站没更新 / 部署红灯**：99% 是漏了 `description`，或把 `pubDatetime` 写成了 `date`。补上/改对，再做一次第 4 步。
 - **想先存草稿、暂不公开**：把 `draft: false` 改成 `draft: true`，它就不会出现在线上（你本地能看）。想发布时再改回 `false`。
 - **写错想撤回**：最快是去 Cloudflare → Pages → Deployments → 选上一个成功版本 → Rollback（一键回到上个版本）。
+
+## 域名迁移（2026-10-07）
+
+- 主站：`https://anvenl.com`，继续使用 Pages 项目 `nodeaitry-astro`。
+- 评论：`https://comments.anvenl.com`，继续使用 Worker `nodeaitry-comments` 和原 D1 数据库；文章路径及 `pageKey` 保持不变。
+- `www.anvenl.com`、`nodeaitry.com` 和 `www.nodeaitry.com` 由评论 Worker 执行 301，保留路径与查询参数。
+- 保留 `comments.nodeaitry.com` 路由，兼容既有 Telegram webhook、审核链接和缓存页面。
+- Worker 的 `PUBLIC_BASE_URL` 当前未被源码使用；既有 Telegram webhook 无需变更。
+- 前端发布：在本仓库提交并推送 `main`，Pages 自动执行 `pnpm build`。
+- 后端发布：在本仓库 `worker/` 中执行 `npx wrangler deploy`。不需要重建或迁移 D1 表。

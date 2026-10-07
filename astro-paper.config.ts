@@ -2,11 +2,11 @@ import { defineAstroPaperConfig } from "./src/types/config";
 
 export default defineAstroPaperConfig({
   site: {
-    url: "https://nodeaitry.com/",
+    url: "https://anvenl.com/",
     title: "NODEAI TRY",
     description: "记录、分享与归档 AI、工程实践与产品思考。",
     author: "nodeaitry",
-    profile: "https://nodeaitry.com/",
+    profile: "https://anvenl.com/",
     ogImage: "default-og.jpg",
     lang: "zh",
     timezone: "Asia/Shanghai",

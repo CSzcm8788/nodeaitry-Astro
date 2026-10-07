@@ -7,8 +7,9 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    if (url.hostname === "www.nodeaitry.com") {
-      url.hostname = "nodeaitry.com";
+    if (["nodeaitry.com", "www.nodeaitry.com", "www.anvenl.com"].includes(url.hostname)) {
+      url.protocol = "https:";
+      url.hostname = new URL(env.SITE_URL).hostname;
       return Response.redirect(url.toString(), 301);
     }
 
