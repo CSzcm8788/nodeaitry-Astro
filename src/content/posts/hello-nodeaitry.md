@@ -26,7 +26,7 @@ aiSummaryBy: "Claude"
 ```js
 const site = {
   name: "Anvenl",
-  stack: ["Hugo", "PaperMod", "Cloudflare"],
+  stack: ["Astro", "PaperMod", "Cloudflare"],
 };
 
 console.log(site.stack.join(" + "));
