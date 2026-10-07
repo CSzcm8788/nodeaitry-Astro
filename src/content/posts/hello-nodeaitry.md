@@ -1,19 +1,19 @@
 ---
-title: "Hello NODEAI TRY"
+title: "Hello Anvenl"
 pubDatetime: 2026-05-28T22:50:00+08:00
-description: "NODEAI TRY 的第一篇文章。"
-tags: ["nodeaitry", "hugo", "papermod"]
+description: "Anvenl的第一篇文章。"
+tags: ["Anvenl", "Astro", "papermod"]
 categories: ["site"]
 draft: false
-aiSummary: "这是 NODEAI TRY 的初始化记录：站点使用 Hugo、PaperMod 和 Cloudflare Pages 构建，并接入评论、代码高亮、目录、分享与深色模式等基础能力。"
+aiSummary: "这是 Anvenl 的初始化记录：站点使用 Astro、PaperMod 和 Cloudflare Pages 构建，并接入评论、代码高亮、目录、分享与深色模式等基础能力。"
 aiSummaryBy: "Claude"
 ---
 
-这是 NODEAI TRY 的第一篇文章。
+这是 Anvenl 的第一篇文章。
 
 ## 写作方式
 
-站点使用 Hugo 和 PaperMod 主题搭建，保留了 PaperMod 的轻量、快速、响应式、深色模式、归档、搜索和文章目录等能力。
+站点使用 Astro 和 PaperMod 主题搭建，保留了 PaperMod 的轻量、快速、响应式、深色模式、归档、搜索和文章目录等能力。
 
 ## 部署链路
 
@@ -25,7 +25,7 @@ aiSummaryBy: "Claude"
 
 ```js
 const site = {
-  name: "NODEAI TRY",
+  name: "Anvenl",
   stack: ["Hugo", "PaperMod", "Cloudflare"],
 };
 
