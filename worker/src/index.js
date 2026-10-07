@@ -72,7 +72,7 @@ async function listComments(request, env, url) {
 
   return json(request, env, {
     ok: true,
-    comments: (rows.results || []).map(publicComment),
+    comments: (rows.results || []).map(row => publicComment(row, env)),
     pagination: { page, pageSize, total, totalPages }
   });
 }
@@ -421,13 +421,13 @@ function normalizeAsn(value) {
   return /^AS/i.test(asn) ? `AS${asn.slice(2)}` : `AS${asn}`;
 }
 
-function publicComment(row) {
+function publicComment(row, env) {
   return {
     id: row.id,
     parentId: row.parent_id,
     rootId: row.root_id,
     depth: row.depth,
-    authorName: row.author_name,
+    authorName: row.is_admin ? (normalizeText(env.ADMIN_NAME, 80) || row.author_name) : row.author_name,
     authorLink: row.author_link,
     content: row.content,
     isAdmin: Boolean(row.is_admin),

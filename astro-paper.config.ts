@@ -5,7 +5,7 @@ export default defineAstroPaperConfig({
     url: "https://anvenl.com/",
     title: "Anvenl's Notes",
     description: "记录、分享与归档 AI、工程实践与产品思考。",
-    author: "nodeaitry",
+    author: "Anvenl",
     profile: "https://anvenl.com/",
     ogImage: "default-og.jpg",
     lang: "zh",
@@ -29,8 +29,8 @@ export default defineAstroPaperConfig({
   },
   socials: [
     { name: "github",   url: "https://github.com/CSzcm8788" },
-    { name: "x",        url: "https://x.com/yukabiubiu" },
-    { name: "telegram", url: "https://t.me/yukabiubiu" },
+    { name: "x",        url: "https://x.com/Anvenl" },
+    { name: "telegram", url: "https://t.me/Anvenl" },
     { name: "mail",     url: "mailto:muziwen.logo@gmail.com" },
   ],
   shareLinks: [
