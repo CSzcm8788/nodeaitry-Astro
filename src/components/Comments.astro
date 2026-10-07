@@ -237,6 +237,7 @@ const api = import.meta.env.DEV
       text.textContent = comment.content || "";
 
       const parts: string[] = [];
+      if (comment.source === "telegram") parts.push("通过 Telegram 回复");
       if (comment.browser) parts.push(String(comment.browser));
       if (comment.os) parts.push(String(comment.os));
       if (comment.ipCountry) parts.push(`${flagEmoji(comment.ipCountryCode)} ${comment.ipCountry}`.trim());

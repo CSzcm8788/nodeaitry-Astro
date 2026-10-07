@@ -241,24 +241,24 @@ async function handleTelegramMessage(env, message) {
   const text = normalizeText(message.text || message.caption || "", 4000);
   if (!text || !message.reply_to_message?.message_id) return;
 
-  let parent = await env.DB.prepare(
-    `SELECT c.*, p.page_key, p.page_url, p.page_title
-       FROM comments c
-       JOIN pages p ON p.id = c.page_id
-      WHERE c.telegram_message_id = ?`
-  ).bind(Number(message.reply_to_message.message_id)).first();
-
-  if (!parent) {
-    const prompt = String(message.reply_to_message.text || message.reply_to_message.caption || "");
-    const commentId = Number(prompt.match(/Reply to comment #(\d+)/i)?.[1] || 0);
-    if (commentId) {
-      parent = await env.DB.prepare(
-        `SELECT c.*, p.page_key, p.page_url, p.page_title
-           FROM comments c
-           JOIN pages p ON p.id = c.page_id
-          WHERE c.id = ?`
-      ).bind(commentId).first();
-    }
+  const prompt = String(message.reply_to_message.text || message.reply_to_message.caption || "");
+  const commentId = Number(prompt.match(/^(?:Reply to comment|New (?:pending|approved) comment) #(\d+)\b/i)?.[1] || 0);
+  // Notification text carries the stable comment ID; Telegram message IDs are chat-scoped.
+  let parent;
+  if (commentId) {
+    parent = await env.DB.prepare(
+      `SELECT c.*, p.page_key, p.page_url, p.page_title
+         FROM comments c
+         JOIN pages p ON p.id = c.page_id
+        WHERE c.id = ?`
+    ).bind(commentId).first();
+  } else {
+    parent = await env.DB.prepare(
+      `SELECT c.*, p.page_key, p.page_url, p.page_title
+         FROM comments c
+         JOIN pages p ON p.id = c.page_id
+        WHERE c.telegram_message_id = ?`
+    ).bind(Number(message.reply_to_message.message_id)).first();
   }
 
   if (!parent) return;
