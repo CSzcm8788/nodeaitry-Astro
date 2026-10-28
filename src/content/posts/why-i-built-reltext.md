@@ -5,6 +5,8 @@ description: "手机上冒出来的想法总是丢，两台设备改同一篇草
 author: "Anvenl"
 tags: ["Reltext", "写作", "独立开发", "产品思考"]
 draft: false
+aiSummary: "Reltext 源于个人博客写作中的三个困扰：手机上的想法难以延续、跨设备修改可能互相覆盖，以及发布文章总要回到电脑。它把 Markdown 写作、离线草稿、明确的冲突处理和确认后发布到 GitHub 串在一起，让文字及其上下文更容易被保留和发布。"
+aiSummaryBy: "Codex"
 ---
 
 我有一个用 Astro 搭的博客，但文章一直写得很少。
