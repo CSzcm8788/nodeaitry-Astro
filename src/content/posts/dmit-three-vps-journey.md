@@ -6,7 +6,7 @@ author: "Anvenl"
 tags: ["VPS", "DMIT", "网络", "折腾记录"]
 draft: false
 aiSummary: "原本只想用一台 DMIT 满足多设备访问需求，后来因直连受阻增加了 LisaHost 和 LOCVPS 香港入口。文章记录了中转与直出的分工、客户端配置踩坑、10 月 27 日的测速，以及 DNS 和服务器防护检查；长期稳定性仍待观察。"
-aiSummaryBy: "Codex"
+aiSummaryBy: "Claude"
 ---
 
 买 DMIT 的时候，我只想给自己弄一条能长期用的线路。Mac 要工作，iPhone 和 Android 也都要用，最好像之前用机场一样，导入配置，打开开关，就不用再管了。
