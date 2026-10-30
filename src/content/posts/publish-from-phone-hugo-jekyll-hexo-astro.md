@@ -6,7 +6,7 @@ author: "Anvenl"
 tags: ["Reltext", "Hugo", "Jekyll", "Hexo", "Astro", "GitHub", "教程"]
 draft: false
 aiSummary: "这篇教程介绍如何用 Reltext 在手机上写 Markdown、连接 GitHub 仓库，并经过预检和确认后发布或更新文章。文中列出了 Hugo、Jekyll、Hexo、Astro 的目录和字段要求，也说明了当前对自定义 AstroPaper 结构的限制，以及同名文件和远端修改的处理方式。"
-aiSummaryBy: "Codex"
+aiSummaryBy: "Claude"
 ---
 
 用 Hugo、Jekyll、Hexo、Astro 这类工具搭的静态博客，好处是文章都在自己的 GitHub 仓库里，坏处是发一篇文章基本离不开电脑：建文件、写 front matter、放图片、提交、推送。
