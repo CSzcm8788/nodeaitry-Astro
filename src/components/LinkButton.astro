@@ -6,8 +6,11 @@ type Props = { disabled?: boolean } & HTMLAttributes<"a">;
 const { disabled, class: className, ...attrs } = Astro.props;
 
 const Button = disabled ? "span" : "a";
+// Keep intentional mail links usable without Cloudflare's client-side decoder.
+const isMailLink = !disabled && String(attrs.href ?? "").startsWith("mailto:");
 ---
 
+<Fragment set:html={isMailLink ? "<!--email_off-->" : ""} />
 <Button
   aria-disabled={disabled}
   class:list={[
@@ -19,3 +22,4 @@ const Button = disabled ? "span" : "a";
 >
   <slot />
 </Button>
+<Fragment set:html={isMailLink ? "<!--/email_off-->" : ""} />

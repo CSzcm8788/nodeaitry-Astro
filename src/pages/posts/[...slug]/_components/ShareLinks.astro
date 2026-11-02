@@ -40,7 +40,7 @@ const items = await Promise.all(
               href={`${url}${pageUrl}`}
               class="scale-90 p-2 hover:rotate-6 sm:p-1"
               title={title}
-              target="_blank"
+              target={url.startsWith("mailto:") ? undefined : "_blank"}
               rel="noopener noreferrer"
             >
               <Icon class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" />
