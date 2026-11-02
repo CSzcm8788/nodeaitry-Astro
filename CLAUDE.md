@@ -155,7 +155,7 @@ git push
 - 主站：`https://anvenl.com`，继续使用 Pages 项目 `nodeaitry-astro`。
 - 评论：`https://comments.anvenl.com`，继续使用 Worker `nodeaitry-comments` 和原 D1 数据库；文章路径及 `pageKey` 保持不变。
 - `www.anvenl.com`、`nodeaitry.com` 和 `www.nodeaitry.com` 由评论 Worker 执行 301，保留路径与查询参数。
-- 保留 `comments.nodeaitry.com` 路由，兼容既有 Telegram webhook、审核链接和缓存页面。
-- Worker 的 `PUBLIC_BASE_URL` 当前未被源码使用；既有 Telegram webhook 无需变更。
+- 2026-11-02：Telegram webhook 已登记为 `https://comments.anvenl.com/v1/telegram`，使用请求头校验现有 webhook 密钥；保留旧评论路由仅用于兼容历史链接和缓存页面。
+- `PUBLIC_BASE_URL` 不会更改 Telegram 端的登记地址。将来迁移时用 `setWebhook` 保留待处理消息，再用 `getWebhookInfo` 核对新地址。
 - 前端发布：在本仓库提交并推送 `main`，Pages 自动执行 `pnpm build`。
 - 后端发布：在本仓库 `worker/` 中执行 `npx wrangler deploy`。不需要重建或迁移 D1 表。
