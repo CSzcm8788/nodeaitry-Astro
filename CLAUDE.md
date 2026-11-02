@@ -70,8 +70,8 @@ draft: false
 4. **图片**：不要把大图塞进仓库正文目录，放这两处之一，再在正文用链接引用：
    - **public/**：把图片放 `public/images/`，正文写 `![说明](/images/图片名.png)`（路径以 `/` 开头）。
      适合站点自身的少量图（图标、封面）。
-   - **R2 图床**：上传到 Cloudflare R2，用其公开访问 URL 引用，例如
-     `![说明](https://你的R2域名/图片名.png)`。文章配图建议都走 R2，避免仓库变大。
+   - **R2 图床**：上传到 Cloudflare R2 的 `nodeaitry-images` 桶，用 `https://images.anvenl.com/` 加对象路径引用，例如
+     `![说明](https://images.anvenl.com/posts/文章名/图片名.webp)`。文章配图建议都走 R2，避免仓库变大。
 
 ### 4. 发布流程
 ```sh
