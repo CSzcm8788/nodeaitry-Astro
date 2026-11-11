@@ -1,0 +1,68 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/components/Main.astro";
+import Footer from "@/components/Footer.astro";
+import { apps } from "@/data/apps";
+import { getAssetPath } from "@/utils/withBase";
+import config from "@/config";
+
+const title = "我的应用";
+const description = "我开发的小应用，把日常里的想法做成用得上的工具。";
+---
+
+<Layout title={`${title} | ${config.site.title}`} description={description}>
+  <Header />
+  <Breadcrumb />
+  <Main pageTitle={title} pageDesc={description}>
+    <ul class="my-8 space-y-6">
+      {
+        apps.map(app => (
+          <li>
+            <article
+              aria-label={app.name}
+              class="border-border rounded-xl border p-5 sm:p-6"
+            >
+              <div class="flex items-center gap-4">
+                <img
+                  src={getAssetPath(app.icon)}
+                  alt={`${app.name} 图标`}
+                  width="72"
+                  height="72"
+                  class="size-18 shrink-0 rounded-2xl"
+                />
+                <div class="min-w-0">
+                  <h2 class="text-xl font-semibold">{app.name}</h2>
+                  <p class="text-muted-foreground mt-1 text-sm">
+                    {app.platform}
+                  </p>
+                </div>
+              </div>
+              <p class="mt-5 leading-7 text-pretty">{app.description}</p>
+              <div class="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+                <p class="text-muted-foreground text-sm">{app.requirement}</p>
+                <a
+                  href={app.appStoreUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`在 App Store 下载 ${app.name}（在新标签页打开）`}
+                  class="inline-flex min-h-15 items-center rounded-sm px-2.5 py-2.5 hover:opacity-80"
+                >
+                  <img
+                    src={getAssetPath("images/apps/app-store-zh.svg")}
+                    alt="在 App Store 下载"
+                    width="109"
+                    height="40"
+                    class="h-10 w-auto"
+                  />
+                </a>
+              </div>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </Main>
+  <Footer />
+</Layout>
