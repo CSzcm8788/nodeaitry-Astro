@@ -58,6 +58,11 @@ const description = "我开发的小应用，把日常里的想法做成用得�
                   />
                 </a>
               </div>
+              {app.storeNote && (
+                <p class="text-muted-foreground mt-2 text-sm">
+                  {app.storeNote}
+                </p>
+              )}
             </article>
           </li>
         ))
