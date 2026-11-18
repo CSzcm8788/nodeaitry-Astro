@@ -522,7 +522,7 @@ const ogImage = ogImageUrl
     }
 
     function activate(image) {
-      open(image.currentSrc || image.src, image.alt, image);
+      open(image.dataset.originalSrc || image.currentSrc || image.src, image.alt, image);
     }
 
     article.addEventListener("click", e => {

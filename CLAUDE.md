@@ -73,6 +73,13 @@ draft: false
    - **R2 图床**：上传到 Cloudflare R2 的 `nodeaitry-images` 桶，用 `https://images.anvenl.com/` 加对象路径引用，例如
      `![说明](https://images.anvenl.com/posts/文章名/图片名.webp)`。文章配图建议都走 R2，避免仓库变大。
 
+### 图片加载与评论性能
+
+- 正文中 `https://images.anvenl.com/` 的 Markdown 配图由 Astro 构建时读取尺寸、生成响应式 WebP，发布到主站 `/_astro/`。R2 原图和文章里的原始链接保留，点击放大仍读取原图。
+- 每篇第一张配图优先加载，后续配图使用浏览器原生懒加载；宽高占位防止图片加载时文字跳动。规则位于 `src/utils/rehypeArticleImages.ts`，新文章自动生效。
+- 构建需要能读取 R2 原图；发布前运行 `pnpm build` 并检查手机图片清晰度。
+- 评论接近视口时加载；GET/POST 请求 12 秒超时，读取失败可手动重试且不跳过分页。提交失败保留内容，不自动重复提交；先刷新评论确认是否已收到。
+
 ### 4. 发布流程
 ```sh
 cd ~/Documents/nodeaitry-hugo/nodeaitry-astro

@@ -20,6 +20,7 @@ import {
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import config from "./astro-paper.config";
+import { rehypeArticleImages } from "./src/utils/rehypeArticleImages";
 
 export default defineConfig({
   site: config.site.url,
@@ -36,10 +37,7 @@ export default defineConfig({
       hooks: {
         "astro:build:done": ({ dir }: { dir: URL }) => {
           const out = fileURLToPath(new URL("_redirects", dir));
-          writeFileSync(
-            out,
-            ["/index.xml /rss.xml 301", ""].join("\n")
-          );
+          writeFileSync(out, ["/index.xml /rss.xml 301", ""].join("\n"));
         },
       },
     },
@@ -57,7 +55,7 @@ export default defineConfig({
         remarkToc,
         [remarkCollapse, { test: "Table of contents" }],
       ],
-      rehypePlugins: [rehypeCallouts],
+      rehypePlugins: [rehypeCallouts, rehypeArticleImages],
     }),
     shikiConfig: {
       themes: { light: "min-light", dark: "night-owl" },
@@ -70,6 +68,10 @@ export default defineConfig({
         transformerNotationDiff({ matchAlgorithm: "v3" }),
       ],
     },
+  },
+  image: {
+    remotePatterns: [{ protocol: "https", hostname: "images.anvenl.com" }],
+    breakpoints: [480, 768, 1024, 1536],
   },
   vite: {
     plugins: [tailwindcss()],

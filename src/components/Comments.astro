@@ -29,7 +29,7 @@ const api = import.meta.env.DEV
   data-page-title={pageTitle}
   data-page-size={pageSize}
 >
-  <h2 class="ct-title">评论 <span id="ct-count">0</span></h2>
+  <h2 class="ct-title">评论 <span id="ct-count"></span></h2>
   <p class="ct-subtitle">读完了？留个言吧。</p>
   <form id="ct-form" class="ct-form">
     <div class="ct-reply-line">
@@ -47,6 +47,8 @@ const api = import.meta.env.DEV
       <button id="ct-submit" class="ct-button" type="submit">提交</button>
     </div>
   </form>
+  <p id="ct-load-message" class="ct-message" role="status"></p>
+  <button id="ct-retry" class="ct-link-button" type="button" hidden>重试加载评论</button>
   <div id="ct-list" class="ct-list"></div>
   <p id="ct-empty" class="ct-empty" hidden>还没有评论。</p>
   <button id="ct-more" class="ct-button ct-more" type="button" hidden>加载更多</button>
@@ -116,6 +118,9 @@ const api = import.meta.env.DEV
     const empty = document.getElementById("ct-empty")!;
     const count = document.getElementById("ct-count")!;
     const more = document.getElementById("ct-more") as HTMLButtonElement;
+    const loadMessage = document.getElementById("ct-load-message")!;
+    const retry = document.getElementById("ct-retry") as HTMLButtonElement;
+    let retryPage = 1;
     const form = document.getElementById("ct-form") as HTMLFormElement;
     const formParent = form.parentNode!;
     const formNext = form.nextSibling;
@@ -285,46 +290,69 @@ const api = import.meta.env.DEV
       empty.hidden = state.total !== 0;
     }
 
-    async function load(reset = false) {
+    // The timer covers both response headers and JSON body download.
+    async function requestJson(url: string, init: RequestInit = {}) {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 12000);
+      try {
+        const response = await fetch(url, { ...init, signal: controller.signal });
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data?.error?.message || `请求失败 (${response.status})`);
+        }
+        return data;
+      } catch (error) {
+        if (controller.signal.aborted) throw new Error("请求超时");
+        throw error;
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    }
+
+    async function load(page = 1) {
       if (state.loading) return;
       state.loading = true;
+      retryPage = page;
+      retry.hidden = true;
       more.disabled = true;
+      loadMessage.textContent = "正在加载评论…";
       try {
-        if (reset) {
-          state.page = 1;
+        const url = new URL(`${api}/v1/comments`);
+        url.searchParams.set("pageKey", pageKey);
+        url.searchParams.set("page", String(page));
+        url.searchParams.set("pageSize", String(state.pageSize));
+        const data = await requestJson(url.toString(), { method: "GET", credentials: "omit" });
+        // Only commit pagination after success, so retry cannot skip a page.
+        if (page === 1) {
           state.comments = [];
           state.seenIds = new Set();
         }
-        const url = new URL(`${api}/v1/comments`);
-        url.searchParams.set("pageKey", pageKey);
-        url.searchParams.set("page", String(state.page));
-        url.searchParams.set("pageSize", String(state.pageSize));
-        const response = await fetch(url.toString(), { method: "GET", credentials: "omit" });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data?.error?.message || `加载评论失败 (${response.status})`);
+        state.page = page;
         state.total = Number(data.pagination?.total || 0);
         state.totalPages = Number(data.pagination?.totalPages || 1);
         count.textContent = String(state.total);
         (Array.isArray(data.comments) ? data.comments : []).forEach((comment: any) => {
           const id = Number(comment.id);
           if (!Number.isFinite(id) || state.seenIds.has(id)) return;
-          state.seenIds.add(id);
           state.comments.push(comment);
+          state.seenIds.add(id);
         });
         render();
         more.hidden = !(state.page < state.totalPages);
-        more.disabled = false;
+        loadMessage.textContent = "";
       } catch (error) {
-        showMessage(error instanceof Error ? error.message : "加载评论失败", true);
+        const reason = error instanceof Error ? error.message : "网络连接失败";
+        loadMessage.textContent = `评论加载失败：${reason}。可以重试，正文不受影响。`;
+        retry.hidden = false;
       } finally {
         state.loading = false;
+        more.disabled = false;
       }
     }
 
-    more.addEventListener("click", async () => {
-      if (state.page >= state.totalPages || state.loading) return;
-      state.page += 1;
-      await load(false);
+    retry.addEventListener("click", () => load(retryPage));
+    more.addEventListener("click", () => {
+      if (state.page < state.totalPages) load(state.page + 1);
     });
 
     replyCancel.addEventListener("click", () => {
@@ -355,23 +383,25 @@ const api = import.meta.env.DEV
       submit.disabled = true;
       showMessage("提交中...");
       try {
-        localStorage.setItem(profileKey, JSON.stringify({ name: payload.authorName, email: payload.authorEmail, link: payload.authorLink }));
-        const response = await fetch(`${api}/v1/comments`, {
+        try {
+          localStorage.setItem(profileKey, JSON.stringify({ name: payload.authorName, email: payload.authorEmail, link: payload.authorLink }));
+        } catch {}
+        const data = await requestJson(`${api}/v1/comments`, {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify(payload),
         });
-        const data = await response.json();
-        if (!response.ok || !data.ok) throw new Error(data?.error?.message || `发表评论失败 (${response.status})`);
         showMessage(data.comment?.status === "pending" ? "已提交，等待审核。" : "评论已发表。");
         contentInput.value = "";
         state.parentId = null;
         state.parentName = "";
         updateReplyUi();
         state.loading = false;
-        await load(true);
+        await load(1);
       } catch (error) {
-        showMessage(error instanceof Error ? error.message : "发表评论失败", true);
+        retryPage = 1;
+        retry.hidden = false;
+        showMessage(`${error instanceof Error ? error.message : "发表评论失败"}。内容已保留；若提交超时，请先刷新评论确认是否已收到，再决定是否重新提交。`, true);
       } finally {
         state.loading = false;
         submit.disabled = false;
@@ -379,7 +409,18 @@ const api = import.meta.env.DEV
     });
 
     updateReplyUi();
-    load(true);
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) {
+          observer.disconnect();
+          load(1);
+        }
+      }, { rootMargin: "400px" });
+      observer.observe(root);
+      document.addEventListener("astro:before-swap", () => observer.disconnect(), { once: true });
+    } else {
+      load(1);
+    }
   }
 
   document.addEventListener("astro:page-load", initComments);
